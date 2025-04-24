@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>EcoBeauty - Sustainable Packaging</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+      <style>
+        .glass {
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        body {
+          font-family: 'Poppins', sans-serif;
+          background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+          min-height: 100vh;
+        }
+
+        .product-card:hover {
+          transform: translateY(-5px);
+          transition: all 0.3s ease;
+        }
+      </style>
+    </head>
+
+    <body class="m-0 p-0">
+
+      <!-- Login Modal -->
+      <div id="loginModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex justify-center items-center h-full">
+          <div class="glass rounded-xl p-8 w-96">
+            <h2 class="text-2xl font-bold text-white mb-4"><b>Login</b></h2>
+            <input type="email" id="loginEmail" placeholder="Email"
+              class="py-2 px-4 rounded-full glass text-white placeholder-white outline-none w-full mb-4">
+            <input type="password" id="loginPassword" placeholder="Password"
+              class="py-2 px-4 rounded-full glass text-white placeholder-white outline-none w-full mb-4">
+            <button onclick="login()" class="bg-white text-green-500 px-6 py-2 rounded-full font-medium w-full">Login</button>
+            <button onclick="closeLoginModal()" class="text-white mt-2">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cart Modal -->
+      <div id="cartModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex justify-center items-center h-full">
+          <div class="glass rounded-xl p-8 w-96">
+            <h2 class="text-2xl font-bold text-white mb-4"><b>Cart</b></h2>
+            <ul id="cartItems" class="text-white mb-4">
+              <!-- Cart items will be dynamically added here -->
+            </ul>
+            <div id="cartTotal" class="text-white font-bold mb-4">Total: ₹0</div>
+            <button onclick="openPaymentModal()"
+              class="bg-white text-green-500 px-6 py-2 rounded-full font-medium w-full mb-2">Proceed to Payment</button>
+            <button onclick="closeCartModal()" class="text-white">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wishlist Modal -->
+      <div id="wishlistModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex justify-center items-center h-full">
+          <div class="glass rounded-xl p-8 w-96">
+            <h2 class="text-2xl font-bold text-white mb-4"><b>Wishlist</b></h2>
+            <ul id="wishlistItems" class="text-white mb-4">
+              <!-- Wishlist items will be dynamically added here -->
+            </ul>
+            <button onclick="closeWishlistModal()" class="text-white">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Modal -->
+      <div id="paymentModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex justify-center items-center h-full">
+          <div class="glass rounded-xl p-8 w-96">
+            <h2 class="text-2xl font-bold text-white mb-4"><b>Payment Options</b></h2>
+            <button onclick="makePayment('Credit Card')"
+              class="bg-white text-green-500 px-6 py-2 rounded-full font-medium w-full mb-2">Credit Card</button>
+            <button onclick="makePayment('UPI')"
+              class="bg-white text-green-500 px-6 py-2 rounded-full font-medium w-full mb-2">UPI</button>
+            <button onclick="makePayment('Net Banking')"
+              class="bg-white text-green-500 px-6 py-2 rounded-full font-medium w-full mb-2">Net Banking</button>
+            <button onclick="closePaymentModal()" class="text-white">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learn More Modal -->
+      <div id="learnMoreModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex justify-center items-center h-full">
+          <div class="glass rounded-xl p-8 w-96">
+            <h2 class="text-2xl font-bold text-white mb-4"><b>About EcoBeauty</b></h2>
+            <p class="text-white mb-4">
+              EcoBeauty is dedicated to providing sustainable beauty products with eco-friendly packaging.
+              We believe in reducing plastic waste and promoting environmental conservation.
+              Our products are made with natural ingredients and packaged in recyclable materials.
+              Join us in our mission for a better, greener tomorrow.
+            </p>
+            <button onclick="closeLearnMoreModal()" class="text-white">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Refill Modal -->
+      <div id="refillModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex justify-center items-center h-full">
+          <div class="glass rounded-xl p-8 w-96">
+            <h2 class="text-2xl font-bold text-white mb-4"><b>Refill Container</b></h2>
+            <p class="text-white mb-4">Do you want to refill your container?</p>
+            <button onclick="refillContainer()"
+              class="bg-white text-green-500 px-6 py-2 rounded-full font-medium w-full mb-2">Yes, Refill</button>
+            <button onclick="closeRefillModal()" class="text-white">No, Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="glass fixed w-full z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+          <h1 class="text-3xl font-bold text-white">EcoBeauty</h1>
+          <div class="flex items-center gap-6">
+            <form class="relative">
+              <input type="search" id="searchInput" placeholder="Search products..." oninput="showSearchOptions()"
+                class="py-2 px-4 rounded-full glass text-white placeholder-white outline-none">
+              <div id="searchOptions" class="absolute left-0 mt-2 w-full glass rounded-md shadow-lg z-10 hidden">
+                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                  <a href="#" onclick="selectSearchOption('shampoo'); closeSearchOptions();"
+                    class="block px-4 py-2 text-sm text-white hover:bg-green-500 hover:text-white"
+                    role="menuitem">Shampoo</a>
+                  <a href="#" onclick="selectSearchOption('conditioner'); closeSearchOptions();"
+                    class="block px-4 py-2 text-sm text-white hover:bg-green-500 hover:text-white"
+                    role="menuitem">Conditioner</a>
+                  <a href="#" onclick="selectSearchOption('moisturizer'); closeSearchOptions();"
+                    class="block px-4 py-2 text-sm text-white hover:bg-green-500 hover:text-white"
+                    role="menuitem">Moisturizer</a>
+                  <a href="#" onclick="selectSearchOption('sunscreen'); closeSearchOptions();"
+                    class="block px-4 py-2 text-sm text-white hover:bg-green-500 hover:text-white"
+                    role="menuitem">Sunscreen</a>
+                  <a href="#" onclick="filterProducts('body lotion'); closeSearchOptions();"
+                    class="block px-4 py-2 text-sm text-white hover:bg-green-500 hover:text-white"
+                    role="menuitem">Body Lotion</a>
+                </div>
+              </div>
+              <i class="bi bi-search absolute right-3 top-2.5 text-white" onclick="openSearchOptions()"></i>
+            </form>
+            <div class="flex gap-4">
+              <i class="bi bi-heart text-white text-xl cursor-pointer" onclick="openWishlistModal()"></i>
+              <div class="relative">
+                <i class="bi bi-cart text-white text-xl cursor-pointer" onclick="openCartModal()"></i>
+                <span id="cartCount"
+                  class="absolute top-[-8px] right-[-8px] bg-red-500 text-white rounded-full px-2 text-xs hidden"></span>
+              </div>
+              <i class="bi bi-person-circle text-white text-xl cursor-pointer" onclick="openLoginModal()"></i>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="pt-24 px-4 container mx-auto">
+        <!-- Hero Section -->
+        <section class="glass rounded-2xl p-8 mb-8">
+          <h2 class="text-4xl font-bold text-white mb-4">Sustainable Beauty for a Better Tomorrow</h2>
+          <p class="text-white mb-6">Join us in reducing plastic waste with eco-friendly packaging solutions.</p>
+          <div class="flex gap-4">
+
+            <button onclick="openLearnMoreModal()" class="glass text-white px-6 py-2 rounded-full font-medium">Learn
+              More</button>
+          </div>
+        </section>
+
+        <!-- Categories -->
+        <div class="flex gap-4 mb-8 overflow-x-auto pb-4">
+          <button onclick="filterProducts('all')"
+            class="glass text-white px-6 py-2 rounded-full whitespace-nowrap">All Products</button>
+          <button onclick="filterProducts('shampoo')"
+            class="glass text-white px-6 py-2 rounded-full whitespace-nowrap">Shampoo</button>
+          <button onclick="filterProducts('conditioner')"
+            class="glass text-white px-6 py-2 rounded-full whitespace-nowrap">Conditioner</button>
+          <button onclick="filterProducts('moisturizer')"
+            class="glass text-white px-6 py-2 rounded-full whitespace-nowrap">Moisturizer</button>
+          <button onclick="filterProducts('sunscreen')"
+            class="glass text-white px-6 py-2 rounded-full whitespace-nowrap">Sunscreen</button>
+          <button onclick="filterProducts('body lotion')"
+            class="glass text-white px-6 py-2 rounded-full whitespace-nowrap">Body Lotion</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+          <!-- Product cards will be dynamically added here -->
+        </div>
+
+        <!-- Sustainability Section -->
+        <section class="glass rounded-2xl p-8 mb-8">
+          <h2 class="text-2xl font-bold text-white mb-4">Sustainability Features</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center">
+              <i class="bi bi-recycle text-white text-4xl mb-2"></i>
+              <h3 class="text-white font-semibold">Recycled Materials</h3>
+              <p class="text-white opacity-75">100% recyclable packaging</p>
+            </div>
+            <div class="text-center">
+              <i class="bi bi-tree text-white text-4xl mb-2"></i>
+              <h3 class="text-white font-semibold">Zero Waste</h3>
+              <p class="text-white opacity-75">Minimal environmental impact</p>
+            </div>
+            <div class="text-center">
+              <i class="bi bi-award text-white text-4xl mb-2"></i>
+              <h3 class="text-white font-semibold">Certified Organic</h3>
+              <p class="text-white opacity-75">Natural ingredients</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="glass mt-8 p-8">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-white font-bold mb-4">About Us</h3>
+            <p class="text-white opacity-75">Committed to sustainable beauty and environmental conservation.</p>
+          </div>
+          <div>
+            <h3 class="text-white font-bold mb-4">Quick Links</h3>
+            <ul class="text-white opacity-75">
+              <li class="mb-2">Products</li>
+              <li class="mb-2">Sustainability</li>
+              <li class="mb-2">Rewards</li>
+              <li>Contact</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-white font-bold mb-4">Connect</h3>
+            <div class="flex gap-4">
+              <i class="bi bi-facebook text-white text-xl"></i>
+              <i class="bi bi-instagram text-white text-xl"></i>
+              <i class="bi bi-twitter text-white text-xl"></i>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-white font-bold mb-4">Newsletter</h3>
+            <form class="flex gap-2">
+              <input type="email" placeholder="Your email"
+                class="glass text-white placeholder-white px-4 py-2 rounded-full flex-1">
+              <button class="glass text-white px-6 py-2 rounded-full">Subscribe</button>
+            </form>
+          </div>
+        </div>
+      </footer>
+
+      <script>
+        // Product data simulation
+        const products = [
+          {
+            name: "Eco Shampoo",
+            price: 24.99,
+            package: "Bamboo Packaging",
+            image: "https://tse4.mm.bing.net/th?id=OIP.F-JPi3dJX6fzCvyPdV3GsAHaKX&pid=Api&P=0&h=180", // Updated image URL
+            
+            priceInRupee: 2081.78,
+            category: "shampoo"
+          },
+          {
+            name: "Eco Conditioner",
+            price: 22.99,
+            package: "Refillable Container",
+            image: "https://img.freepik.com/premium-photo/isolated-light-blue-shampoo-bottle-presented-as-no-brand-mockup-pastel-orange-background_842021-7.jpg",
+            priceInRupee: 1914.13,
+            category: "conditioner"
+          },
+          {
+            name: "Eco Moisturizer",
+            price: 29.99,
+            package: "Glass Bottle",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 2498.31,
+            category: "moisturizer"
+          },
+          {
+            name: "Eco Sunscreen",
+            price: 19.99,
+            package: "Biodegradable Tube",
+            image: "https://images.healthshots.com/healthshots/en/uploads/2021/07/09164501/how-to-apply-sunscreen.jpg",
+            priceInRupee: 1665.58,
+            category: "sunscreen"
+          },
+          {
+            name: "Nourishing Shampoo",
+            price: 26.99,
+            package: "Recycled Plastic Bottle",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 2248.21,
+            category: "shampoo"
+          },
+          {
+            name: "Hydrating Shampoo",
+            price: 28.99,
+            package: "Aluminum Bottle",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 2414.64,
+            category: "shampoo"
+          },
+          {
+            name: "Smoothing Conditioner",
+            price: 24.99,
+            package: "Refillable Pouch",
+            image: "https://suggesthow.com/wp-content/uploads/2021/08/how-to-get-suncreen-smell-out-of-clothes-3.jpg",
+            priceInRupee: 2081.78,
+            category: "conditioner"
+          },
+          {
+            name: "Volumizing Conditioner",
+            price: 23.99,
+            package: "Concentrated Formula",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            category: "conditioner"
+          },
+          {
+            name: "Revitalizing Body Lotion",
+            price: 18.99,
+            package: "Plant-Based Plastic",
+            image: "https://png.pngtree.com/thumb_back/fw800/background/20230426/pngtree-skin-care-products-sunscreen-beach-summer-background-image_2479515.jpg",
+            priceInRupee: 1582.26,
+            category: "body lotion"
+          },
+          {
+            name: "Daily Use Sunscreen",
+            price: 21.99,
+            package: "Reef Safe Formula",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 1832.42,
+            category: "sunscreen"
+          },
+          {
+            name: "Sport Sunscreen",
+            price: 23.99,
+            package: "Water Resistant",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 1998.46,
+            category: "sunscreen"
+          },
+          {
+            name: "Tinted Sunscreen",
+            price: 25.99,
+            package: "Mineral Based",
+            image: "https://png.pngtree.com/background/20230426/original/pngtree-sunscreen-beach-glasses-summer-background-picture-image_2487838.jpg",
+            priceInRupee: 2164.91,
+            category: "sunscreen"
+          },
+          {
+            name: "Kids Sunscreen",
+            price: 17.99,
+            package: "Reef Safe Formula",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 1500.00,
+            category: "sunscreen"
+          },
+          {
+            name: "Face Sunscreen",
+            price: 27.99,
+            package: "Reef Safe Formula",
+            image: "https://www.thehealthy.com/wp-content/uploads/2019/04/sunscreen.jpg",
+            priceInRupee: 2331.33,
+            category: "sunscreen"
+          },
+          {
+            name: "Soothing Body Lotion",
+            price: 20.99,
+            package: "Organic Aloe Vera",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 1749.10,
+            category: "body lotion"
+          },
+          {
+            name: "Hydrating Body Lotion",
+            price: 22.99,
+            package: "Organic Aloe Vera",
+            image: "https://aestheticsmedspa.com/wp-content/uploads/2022/09/Broad-spectrum-sunscreen.jpg",
+            priceInRupee: 1914.13,
+            category: "body lotion"
+          },
+          {
+            name: "Intense Hydration Moisturizer",
+            price: 31.99,
+            package: "Hyaluronic Acid",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 2664.74,
+            category: "moisturizer"
+          },
+          {
+            name: "Anti-Aging Moisturizer",
+            price: 34.99,
+            package: "Retinol Formula",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 2913.30,
+            category: "moisturizer"
+          },
+          {
+            name: "Brightening Moisturizer",
+            price: 27.99,
+            package: "Vitamin C Serum",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            priceInRupee: 2331.33,
+            category: "moisturizer"
+          },
+          {
+            name: "Night Moisturizer",
+            price: 37.99,
+            package: "Vitamin C Serum",
+            image: "https://m.media-amazon.com/images/I/71K57Vw-JjL._AC_UF1000,1000_QL80_.jpg",
+            category: "moisturizer"
+          }
+        ];
+
+        let cart = [];
+        let cartTotal = 0;
+        let wishlist = [];
+        let currentCategory = 'all';
+        let currentSearchTerm = '';
+
+        function generateProductCard(product) {
+          const isFavorite = wishlist.some(item => item.name === product.name);
+          const heartClass = isFavorite ? 'text-red-500' : 'text-white';
+
+          return `
+                    <div class="product-card glass rounded-xl p-4">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="text-white font-semibold">${product.name}</h3>
+                                <p class="text-white opacity-75">${product.package}</p>
+                            </div>
+                            <button class="glass p-2 rounded-full" onclick="toggleWishlist('${product.name}', ${product.priceInRupee})">
+                                <i class="bi bi-heart ${heartClass}"></i>
+                            </button>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-white font-bold">₹${product.priceInRupee}</span>
+                            <button class="glass text-white px-4 py-2 rounded-full text-sm" onclick="addToCart('${product.name}', ${product.priceInRupee})">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+        }
+
+        function displayProducts(productList) {
+          const productsGrid = document.getElementById('productsGrid');
+          productsGrid.innerHTML = '';
+          productList.forEach(product => {
+            productsGrid.innerHTML += generateProductCard(product);
+          });
+        }
+
+        function filterProducts(category, searchTerm = '') {
+          currentCategory = category;
+          currentSearchTerm = searchTerm;
+          let filteredProducts = [...products]; // Create a copy to avoid modifying the original
+
+          if (category !== 'all') {
+            filteredProducts = filteredProducts.filter(product => product.category === category);
+          }
+
+          filteredProducts = filteredProducts.filter(product =>
+            product.name.toLowerCase().includes(searchTerm)
+          );
+
+          displayProducts(filteredProducts);
+        }
+
+        function addToCart(productName, productPrice) {
+          cart.push({ name: productName, price: productPrice });
+          cartTotal += productPrice;
+          updateCartUI();
+        }
+
+        function removeFromCart(index) {
+          cartTotal -= cart[index].price;
+          cart.splice(index, 1);
+          updateCartUI();
+        }
+
+        function toggleWishlist(productName, productPrice) {
+          const product = { name: productName, price: productPrice };
+          const index = wishlist.findIndex(item => item.name === productName);
+
+          if (index === -1) {
+            wishlist.push(product);
+          } else {
+            wishlist.splice(index, 1);
+          }
+          updateWishlistUI();
+          filterProducts(currentCategory, currentSearchTerm);
+        }
+
+        function updateWishlistUI() {
+          const wishlistItemsList = document.getElementById('wishlistItems');
+          wishlistItemsList.innerHTML = ''; // Clear existing items
+          wishlist.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.textContent = item.name + ' - ₹' + item.price;
+            wishlistItemsList.appendChild(listItem);
+          });
+        }
+
+        function updateCartUI() {
+          const cartCountSpan = document.getElementById('cartCount');
+          cartCountSpan.classList.remove('hidden');
+          cartCountSpan.textContent = "+" + cart.length;
+
+          const cartItemsList = document.getElementById('cartItems');
+          cartItemsList.innerHTML = ''; // Clear existing items
+          cart.forEach((item, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = item.name + ' - ₹' + item.price;
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.classList.add('glass', 'text-white', 'px-2', 'py-1', 'rounded-full', 'text-xs', 'ml-2');
+            removeButton.onclick = () => removeFromCart(index);
+
+            listItem.appendChild(removeButton);
+            cartItemsList.appendChild(listItem);
+          });
+
+          document.getElementById('cartTotal').textContent = 'Total: ₹' + cartTotal;
+        }
+
+        function openLoginModal() {
+          document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+          document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function openCartModal() {
+          document.getElementById('cartModal').classList.remove('hidden');
+        }
+
+        function closeCartModal() {
+          document.getElementById('cartModal').classList.add('hidden');
+        }
+
+        function openWishlistModal() {
+          document.getElementById('wishlistModal').classList.remove('hidden');
+          updateWishlistUI();
+        }
+
+        function closeWishlistModal() {
+          document.getElementById('wishlistModal').classList.add('hidden');
+        }
+
+        function openPaymentModal() {
+          document.getElementById('cartModal').classList.add('hidden');
+          document.getElementById('paymentModal').classList.remove('hidden');
+        }
+
+        function closePaymentModal() {
+          document.getElementById('paymentModal').classList.add('hidden');
+        }
+
+        function openLearnMoreModal() {
+          document.getElementById('learnMoreModal').classList.remove('hidden');
+        }
+
+        function closeLearnMoreModal() {
+          document.getElementById('learnMoreModal').classList.add('hidden');
+        }
+
+        function makePayment(paymentMethod) {
+          alert('Payment successful via ' + paymentMethod + '! Total amount: ₹' + cartTotal);
+          closePaymentModal();
+          cart = [];
+          cartTotal = 0;
+          updateCartUI();
+        }
+
+        function openRefillModal() {
+          document.getElementById('refillModal').classList.remove('hidden');
+        }
+
+        function closeRefillModal() {
+          document.getElementById('refillModal').classList.add('hidden');
+        }
+
+        function refillContainer() {
+          alert('Container refilled!');
+          closeRefillModal();
+        }
+
+        function login() {
+          const email = document.getElementById('loginEmail').value;
+          const password = document.getElementById('loginPassword').value;
+
+          // Basic validation
+          if (!email || !password) {
+            alert('Please enter email and password.');
+            return;
+          }
+
+          // In a real application, you would send this data to a server for authentication
+          // Here, we'll just simulate a successful login
+          if (email === 'test@example.com' && password === 'password') {
+            alert('Login successful!');
+            closeLoginModal();
+            // You might want to update the UI to reflect the user being logged in
+          } else {
+            alert('Invalid credentials.');
+          }
+        }
+
+        // Search functionality
+
+
+        function openSearchOptions() {
+          document.getElementById('searchOptions').classList.remove('hidden');
+        }
+
+        function closeSearchOptions() {
+          document.getElementById('searchOptions').classList.add('hidden');
+        }
+
+        function showSearchOptions() {
+          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+          const searchOptions = document.getElementById('searchOptions');
+
+          if (searchTerm.length > 0) {
+            searchOptions.classList.remove('hidden');
+          } else {
+            searchOptions.classList.add('hidden');
+          }
+        }
+
+        function selectSearchOption(category) {
+          filterProducts(category, document.getElementById('searchInput').value.toLowerCase());
+          closeSearchOptions();
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function () {
+          showSearchOptions();
+          filterProducts('all', document.getElementById('searchInput').value.toLowerCase());
+        });
+
+        // Initial product display
+        filterProducts('all');
+      </script>
+      <script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+      <script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+      <script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+    <script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+
+    </html>
